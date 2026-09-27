@@ -56,11 +56,19 @@ entity_vh: sensor.your_tilt_front_back
 entity_zero_button: button.your_tilt_zero   # optional
 ```
 
+## Language
+
+The card's own UI text (labels, the "Zero" button, the editor fields)
+follows your Home Assistant language setting (`hass.language`) –
+currently English and German, with English as the fallback for any
+other language. Contributions adding more languages are welcome (see
+`TRANSLATIONS` in `rv-leveling-card.js`).
+
 ## Configuration options
 
 | Option | Required | Description |
 |---|---|---|
-| `title` | no | Card heading (default: "Nivellierung") |
+| `title` | no | Card heading (default: "Leveling"/"Nivellierung", follows the HA language) |
 | `vehicle_type` | no | `caravan` (default) or `motorhome` |
 | `entity_lr` | yes | Left/right tilt sensor (°) |
 | `entity_vh` | yes | Front/back tilt sensor (°) |

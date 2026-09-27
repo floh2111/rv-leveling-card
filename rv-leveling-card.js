@@ -6,10 +6,8 @@
  * auf einem Dashboard. Wahlweise als Wohnwagen (Deichsel) oder Wohnmobil
  * (Frontscheibe) darstellbar, einstellbar im Karteneditor (vehicle_type).
  *
- * Ursprünglich für das Fridolin-Display-Projekt gebaut
- * (github.com/floh2111/ha-fridolin-display, ESPHome + eigene HA-
- * Integration), funktioniert aber mit jeder Entity-Kombination, die zwei
- * Neigungswinkel in Grad liefert:
+ * Funktioniert mit jeder Entity-Kombination, die zwei Neigungswinkel in
+ * Grad liefert:
  *   - entity_lr: Sensor "Neigung links/rechts" (°, positiv/negativ)
  *   - entity_vh: Sensor "Neigung vorne/hinten" (°, positiv/negativ)
  *   - entity_zero_button (optional): ein button, der den Nullpunkt auf
@@ -31,6 +29,48 @@
  *        entity_vh: sensor.deine_neigung_vorne_hinten
  *        entity_zero_button: button.deine_neigung_nullen
  */
+
+// Uebersetzung der sichtbaren UI-Texte (nicht der Kommentare/des Codes).
+// Home Assistant liefert die Sprache des Nutzers ueber hass.language
+// (z.B. "de", "de-DE", "en") - siehe t() unten. Englisch ist der
+// Standard/Fallback, Deutsch die einzige weitere Sprache bisher.
+const TRANSLATIONS = {
+  en: {
+    default_title: "Leveling",
+    value_lr: "Left/Right:",
+    value_vh: "Front/Back:",
+    zero_button: "Zero",
+    editor_title: "Title",
+    editor_vehicle_type: "Vehicle type",
+    editor_vehicle_caravan: "Caravan",
+    editor_vehicle_motorhome: "Motorhome",
+    editor_entity_lr: "Left/Right sensor",
+    editor_entity_vh: "Front/Back sensor",
+    editor_entity_zero_button: "Zero button",
+  },
+  de: {
+    default_title: "Nivellierung",
+    value_lr: "Links/Rechts:",
+    value_vh: "Vorne/Hinten:",
+    zero_button: "Nullen",
+    editor_title: "Titel",
+    editor_vehicle_type: "Fahrzeugtyp",
+    editor_vehicle_caravan: "Wohnwagen",
+    editor_vehicle_motorhome: "Wohnmobil",
+    editor_entity_lr: "Sensor Links/Rechts",
+    editor_entity_vh: "Sensor Vorne/Hinten",
+    editor_entity_zero_button: "Nullen-Button",
+  },
+};
+
+// hass.language ist z.B. "de", "de-DE" oder "en" - nur das Praefix vor
+// einem eventuellen "-" zaehlt, alles ohne deutsche Uebersetzung faellt
+// auf Englisch zurueck.
+function t(key, hass) {
+  const lang = (hass && hass.language ? hass.language : "en").split("-")[0];
+  const dict = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  return dict[key] || TRANSLATIONS.en[key] || key;
+}
 
 const CARAVAN_SVG_BODY = `
   <defs>
@@ -222,8 +262,8 @@ class RvLevelingCardEditor extends HTMLElement {
           select: {
             mode: "dropdown",
             options: [
-              { value: "caravan", label: "Wohnwagen" },
-              { value: "motorhome", label: "Wohnmobil" },
+              { value: "caravan", label: t("editor_vehicle_caravan", this._hass) },
+              { value: "motorhome", label: t("editor_vehicle_motorhome", this._hass) },
             ],
           },
         },
@@ -236,11 +276,11 @@ class RvLevelingCardEditor extends HTMLElement {
 
   _computeLabel(schema) {
     const labels = {
-      title: "Titel",
-      vehicle_type: "Fahrzeugtyp",
-      entity_lr: "Sensor Links/Rechts",
-      entity_vh: "Sensor Vorne/Hinten",
-      entity_zero_button: "Nullen-Button",
+      title: t("editor_title", this._hass),
+      vehicle_type: t("editor_vehicle_type", this._hass),
+      entity_lr: t("editor_entity_lr", this._hass),
+      entity_vh: t("editor_entity_vh", this._hass),
+      entity_zero_button: t("editor_entity_zero_button", this._hass),
     };
     return labels[schema.name] || schema.name;
   }
@@ -265,7 +305,7 @@ class RvLevelingCardEditor extends HTMLElement {
     this._form.hass = this._hass;
     this._form.data = this._config;
     this._form.schema = this._schema;
-    this._form.computeLabel = this._computeLabel;
+    this._form.computeLabel = this._computeLabel.bind(this);
   }
 }
 
@@ -276,9 +316,9 @@ class RvLevelingCard extends HTMLElement {
     return document.createElement("rv-leveling-card-editor");
   }
 
-  static getStubConfig() {
+  static getStubConfig(hass) {
     return {
-      title: "Nivellierung",
+      title: t("default_title", hass),
       vehicle_type: "caravan",
       entity_lr: "",
       entity_vh: "",
@@ -291,7 +331,10 @@ class RvLevelingCard extends HTMLElement {
       entity_lr: "",
       entity_vh: "",
       entity_zero_button: "",
-      title: "Nivellierung",
+      // Kein fester Titel-Default hier: "title" bleibt undefined, wenn der
+      // Nutzer keinen gesetzt hat - _render() loest den Default erst dort
+      // per t() auf (braucht this._hass fuer die Sprache, die beim
+      // ersten setConfig() noch nicht unbedingt gesetzt ist).
       vehicle_type: "caravan",
       ...config,
     };
@@ -325,7 +368,7 @@ class RvLevelingCard extends HTMLElement {
 
     const card = document.createElement("ha-card");
     card.innerHTML = `
-      <div class="fw-title">${this._config.title}</div>
+      <div class="fw-title">${this._config.title || t("default_title", this._hass)}</div>
       <div class="fw-outer">
         <div class="fw-inner">
           <svg id="fwSvg" viewBox="${vb.x} ${vb.y} ${vb.w} ${vb.h}" xmlns="http://www.w3.org/2000/svg">
@@ -336,11 +379,11 @@ class RvLevelingCard extends HTMLElement {
         </div>
       </div>
       <div class="fw-values">
-        <span>Links/Rechts:<b id="fwValLr">--</b></span>
-        <span>Vorne/Hinten:<b id="fwValVh">--</b></span>
+        <span><span id="fwLabelLr"></span><b id="fwValLr">--</b></span>
+        <span><span id="fwLabelVh"></span><b id="fwValVh">--</b></span>
       </div>
       <div class="fw-footer">
-        <button class="fw-zero-btn" id="fwZeroBtn">Nullen</button>
+        <button class="fw-zero-btn" id="fwZeroBtn"></button>
       </div>
     `;
 
@@ -355,6 +398,8 @@ class RvLevelingCard extends HTMLElement {
       outer: card.querySelector(".fw-outer"),
       bubbleVh: card.querySelector("#fwBubbleVh"),
       bubbleLr: card.querySelector("#fwBubbleLr"),
+      labelLr: card.querySelector("#fwLabelLr"),
+      labelVh: card.querySelector("#fwLabelVh"),
       valLr: card.querySelector("#fwValLr"),
       valVh: card.querySelector("#fwValVh"),
       zeroBtn: card.querySelector("#fwZeroBtn"),
@@ -409,7 +454,10 @@ class RvLevelingCard extends HTMLElement {
 
   _render() {
     if (!this._hass || !this._els) return;
-    this._els.title.textContent = this._config.title;
+    this._els.title.textContent = this._config.title || t("default_title", this._hass);
+    this._els.labelLr.textContent = t("value_lr", this._hass);
+    this._els.labelVh.textContent = t("value_vh", this._hass);
+    this._els.zeroBtn.textContent = t("zero_button", this._hass);
     this._syncVehicleArt();
 
     const lrState = this._hass.states[this._config.entity_lr];

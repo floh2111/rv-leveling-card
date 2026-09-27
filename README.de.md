@@ -56,11 +56,19 @@ entity_vh: sensor.deine_neigung_vorne_hinten
 entity_zero_button: button.deine_neigung_nullen   # optional
 ```
 
+## Sprache
+
+Die eigenen UI-Texte der Karte (Labels, der "Nullen"-Button, die
+Editor-Felder) folgen deiner Home-Assistant-Spracheinstellung
+(`hass.language`) – aktuell Englisch und Deutsch, Englisch als
+Fallback für jede andere Sprache. Beiträge für weitere Sprachen sind
+willkommen (siehe `TRANSLATIONS` in `rv-leveling-card.js`).
+
 ## Konfigurationsoptionen
 
 | Option | Pflicht | Beschreibung |
 |---|---|---|
-| `title` | nein | Überschrift der Karte (Standard: "Nivellierung") |
+| `title` | nein | Überschrift der Karte (Standard: "Nivellierung"/"Leveling", folgt der HA-Sprache) |
 | `vehicle_type` | nein | `caravan` (Wohnwagen, Standard) oder `motorhome` (Wohnmobil) |
 | `entity_lr` | ja | Sensor Neigung links/rechts (°) |
 | `entity_vh` | ja | Sensor Neigung vorne/hinten (°) |
