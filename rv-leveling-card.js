@@ -25,7 +25,7 @@
  *   2. Home Assistant neu starten, Ressource wird von HACS automatisch
  *      unter /hacsfiles/rv-leveling-card/rv-leveling-card.js eingebunden.
  *   3. Karte hinzufügen:
- *        type: custom:fridolin-nivellierung-card
+ *        type: custom:rv-leveling-card
  *        vehicle_type: caravan   # oder: motorhome
  *        entity_lr: sensor.deine_neigung_links_rechts
  *        entity_vh: sensor.deine_neigung_vorne_hinten
@@ -202,7 +202,7 @@ const CARD_STYLE = `
 // <ha-form>, das im Home-Assistant-Frontend bereits global registriert ist
 // (kein eigener Import nötig) - derselbe Ansatz wie bei den meisten anderen
 // Custom Cards.
-class FridolinNivellierungCardEditor extends HTMLElement {
+class RvLevelingCardEditor extends HTMLElement {
   setConfig(config) {
     this._config = { ...config };
     this._render();
@@ -269,11 +269,11 @@ class FridolinNivellierungCardEditor extends HTMLElement {
   }
 }
 
-customElements.define("fridolin-nivellierung-card-editor", FridolinNivellierungCardEditor);
+customElements.define("rv-leveling-card-editor", RvLevelingCardEditor);
 
-class FridolinNivellierungCard extends HTMLElement {
+class RvLevelingCard extends HTMLElement {
   static getConfigElement() {
-    return document.createElement("fridolin-nivellierung-card-editor");
+    return document.createElement("rv-leveling-card-editor");
   }
 
   static getStubConfig() {
@@ -453,14 +453,12 @@ class FridolinNivellierungCard extends HTMLElement {
   }
 }
 
-customElements.define("fridolin-nivellierung-card", FridolinNivellierungCard);
+customElements.define("rv-leveling-card", RvLevelingCard);
 
-// Damit die Karte im UI-Karteneditor unter "Benutzerdefiniert" auftaucht.
-// Der Element-Name bleibt "fridolin-nivellierung-card" (Herkunft des
-// Projekts), damit bestehende Dashboard-Konfigurationen weiterlaufen.
+// Damit die Karte im UI-Karteneditor unter "Benutzerdefiniert" auftaucht
 window.customCards = window.customCards || [];
 window.customCards.push({
-  type: "fridolin-nivellierung-card",
+  type: "rv-leveling-card",
   name: "RV Leveling Card",
   description: "Kreuzlibelle auf einem Fahrzeug-Grundriss (Wohnwagen oder Wohnmobil, Front oben) aus zwei Neigungssensoren.",
 });

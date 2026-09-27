@@ -49,7 +49,7 @@ sich direkt im visuellen Editor einstellen.
 Alternativ per YAML:
 
 ```yaml
-type: custom:fridolin-nivellierung-card
+type: custom:rv-leveling-card
 title: Nivellierung
 vehicle_type: caravan   # oder: motorhome
 entity_lr: sensor.deine_neigung_links_rechts
@@ -57,8 +57,9 @@ entity_vh: sensor.deine_neigung_vorne_hinten
 entity_zero_button: button.deine_neigung_nullen   # optional
 ```
 
-> Der interne Element-Typ heißt weiterhin `fridolin-nivellierung-card`
-> (Herkunft des Projekts) – das ist kein Tippfehler.
+> **Umbenannt in v2.0.0**: Der Karten-Typ hieß vorher `custom:fridolin-
+> nivellierung-card`. Bestehende Dashboards müssen die Karte einmal neu
+> hinzufügen bzw. `type:` in ihrer YAML-Konfiguration anpassen.
 
 ## Konfigurationsoptionen
 
