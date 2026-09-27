@@ -1,73 +1,159 @@
 # RV Leveling Card
 
-Eine Lovelace-Karte für Home Assistant: eine Kreuzlibelle (Wasserwaage)
-auf einem Fahrzeug-Grundriss – wahlweise **Wohnwagen** (mit Deichsel)
-oder **Wohnmobil** (mit Frontscheibe) –, mit der Front nach oben. Zeigt
-den aktuellen Neigungswinkel in zwei Achsen (Links/Rechts, Vorne/Hinten)
-an und kann per Knopf einen Nullpunkt an einer beliebigen Entity
-auslösen (z.B. um den Sensor an der Quelle zu kalibrieren).
+🇩🇪 [Deutsche Version](README.de.md)
 
-| Wohnwagen | Wohnmobil |
+A Lovelace card for Home Assistant: a cross-level (spirit level) drawn
+on a vehicle floor plan – either a **caravan** (with tow hitch) or a
+**motorhome** (with windshield) – with the front pointing up. Shows the
+current tilt angle on two axes (left/right, front/back) and can trigger
+a zero-point calibration on any entity via a button press (e.g. to
+calibrate the sensor at its source).
+
+| Caravan | Motorhome |
 |---|---|
-| ![Wohnwagen](images/preview-caravan.png) | ![Wohnmobil](images/preview-motorhome.png) |
+| ![Caravan](images/preview-caravan.png) | ![Motorhome](images/preview-motorhome.png) |
 
-Funktioniert mit **jeder** Entity-Kombination, die zwei Neigungswinkel
-in Grad liefert – unabhängig von Hersteller oder Sensor-Typ.
+Works with **any** entity combination that provides two tilt angles in
+degrees – independent of manufacturer or sensor type.
 
-## Voraussetzungen
+## Requirements
 
-Zwei `sensor`-Entities mit einem Neigungswinkel in Grad (positive und
-negative Werte, z.B. `-3.2` bis `3.2`):
+Two `sensor` entities with a tilt angle in degrees (positive and
+negative values, e.g. `-3.2` to `3.2`):
 
-- Neigung **links/rechts**
-- Neigung **vorne/hinten**
+- **Left/right** tilt
+- **Front/back** tilt
 
-Optional ein `button` (oder eine andere Entity mit `button.press`), der
-auf der Gegenstelle den Nullpunkt setzt/kalibriert. Die Karte selbst
-speichert nichts – ein Druck auf "Nullen" ruft nur `button.press` auf
-dieser Entity auf.
+Optionally a `button` (or any other entity supporting `button.press`)
+that sets/calibrates the zero point on the source device. The card
+itself stores nothing – pressing "Zero" just calls `button.press` on
+that entity.
 
-## Installation über HACS
+## Installation via HACS
 
-1. HACS → oben rechts ⋮ → Benutzerdefinierte Repositories.
-2. Repository-URL: `https://github.com/floh2111/rv-leveling-card`,
-   Kategorie: **Dashboard**.
-3. "RV Leveling Card" installieren, Home Assistant neu starten.
-4. Die Ressource wird von HACS automatisch unter
-   `/hacsfiles/rv-leveling-card/rv-leveling-card.js` eingebunden
-   (Lovelace-Ressource wird von HACS selbst verwaltet).
+1. HACS → top right ⋮ → Custom repositories.
+2. Repository URL: `https://github.com/floh2111/rv-leveling-card`,
+   Category: **Dashboard**.
+3. Install "RV Leveling Card", restart Home Assistant.
+4. The resource is automatically registered by HACS under
+   `/hacsfiles/rv-leveling-card/rv-leveling-card.js` (the Lovelace
+   resource is managed by HACS itself).
 
-## Karte hinzufügen
+## Adding the card
 
-Über den Karten-Editor: "Karte hinzufügen" → "Benutzerdefiniert" →
-**RV Leveling Card**. Titel, Fahrzeugtyp und die drei Entity-IDs lassen
-sich direkt im visuellen Editor einstellen.
+Via the card editor: "Add card" → "Custom" → **RV Leveling Card**.
+Title, vehicle type and the three entity IDs can be set directly in the
+visual editor.
 
-Alternativ per YAML:
+Or via YAML:
 
 ```yaml
 type: custom:rv-leveling-card
-title: Nivellierung
-vehicle_type: caravan   # oder: motorhome
-entity_lr: sensor.deine_neigung_links_rechts
-entity_vh: sensor.deine_neigung_vorne_hinten
-entity_zero_button: button.deine_neigung_nullen   # optional
+title: Leveling
+vehicle_type: caravan   # or: motorhome
+entity_lr: sensor.your_tilt_left_right
+entity_vh: sensor.your_tilt_front_back
+entity_zero_button: button.your_tilt_zero   # optional
 ```
 
-> **Umbenannt in v2.0.0**: Der Karten-Typ hieß vorher `custom:fridolin-
-> nivellierung-card`. Bestehende Dashboards müssen die Karte einmal neu
-> hinzufügen bzw. `type:` in ihrer YAML-Konfiguration anpassen.
+## Configuration options
 
-## Konfigurationsoptionen
-
-| Option | Pflicht | Beschreibung |
+| Option | Required | Description |
 |---|---|---|
-| `title` | nein | Überschrift der Karte (Standard: "Nivellierung") |
-| `vehicle_type` | nein | `caravan` (Wohnwagen, Standard) oder `motorhome` (Wohnmobil) |
-| `entity_lr` | ja | Sensor Neigung links/rechts (°) |
-| `entity_vh` | ja | Sensor Neigung vorne/hinten (°) |
-| `entity_zero_button` | nein | Button, der bei "Nullen" gedrückt wird |
+| `title` | no | Card heading (default: "Nivellierung") |
+| `vehicle_type` | no | `caravan` (default) or `motorhome` |
+| `entity_lr` | yes | Left/right tilt sensor (°) |
+| `entity_vh` | yes | Front/back tilt sensor (°) |
+| `entity_zero_button` | no | Button pressed by the card's "Zero" button |
 
-## Lizenz
+## Example: providing your own tilt sensor via ESPHome
+
+If you don't have suitable entities yet: an ESP32/ESP8266 with an
+MPU6050 accelerometer (GY-521 breakout board, a couple of dollars, I²C)
+can provide all three required entities in a few lines of ESPHome YAML.
+Wiring: `VCC`→3V3, `GND`→GND, `SCL`→any GPIO (22 here), `SDA`→any GPIO
+(21 here).
+
+```yaml
+i2c:
+  sda: GPIO21
+  scl: GPIO22
+
+# The zero-point offset survives a reboot, but isn't written to flash
+# on every single change (saves flash write cycles)
+preferences:
+  flash_write_interval: 5min
+
+globals:
+  - id: g_offset_lr
+    type: float
+    restore_value: true
+    initial_value: '0'
+  - id: g_offset_vh
+    type: float
+    restore_value: true
+    initial_value: '0'
+  - id: g_raw_lr
+    type: float
+    restore_value: false
+    initial_value: '0'
+  - id: g_raw_vh
+    type: float
+    restore_value: false
+    initial_value: '0'
+
+sensor:
+  - platform: mpu6050
+    address: 0x68
+    update_interval: 200ms
+    accel_x:
+      id: accel_x
+    accel_y:
+      id: accel_y
+    accel_z:
+      id: accel_z
+
+  # card's entity_lr
+  - platform: template
+    id: tilt_left_right
+    name: "Tilt left-right"
+    unit_of_measurement: "°"
+    update_interval: 200ms
+    lambda: |-
+      float raw = atan2(id(accel_y).state, id(accel_z).state) * 180.0 / M_PI;
+      id(g_raw_lr) = raw;
+      return raw - id(g_offset_lr);
+
+  # card's entity_vh
+  - platform: template
+    id: tilt_front_back
+    name: "Tilt front-back"
+    unit_of_measurement: "°"
+    update_interval: 200ms
+    lambda: |-
+      float raw = atan2(-id(accel_x).state, sqrt(id(accel_y).state * id(accel_y).state + id(accel_z).state * id(accel_z).state)) * 180.0 / M_PI;
+      id(g_raw_vh) = raw;
+      return raw - id(g_offset_vh);
+
+# card's entity_zero_button
+button:
+  - platform: template
+    name: "Zero tilt"
+    on_press:
+      - lambda: |-
+          id(g_offset_lr) = id(g_raw_lr);
+          id(g_offset_vh) = id(g_raw_vh);
+      - component.update: tilt_left_right
+      - component.update: tilt_front_back
+```
+
+After flashing, `sensor.tilt_left_right`, `sensor.tilt_front_back` and
+`button.zero_tilt` automatically show up in Home Assistant (assuming
+the ESPHome API integration is set up) – exactly the three entities the
+card needs. Pressing "Zero" remembers the current position as the new
+zero point, stored permanently in the ESP's flash (survives a Home
+Assistant restart too).
+
+## License
 
 MIT
