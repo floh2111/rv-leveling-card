@@ -11,11 +11,8 @@ auslösen (z.B. um den Sensor an der Quelle zu kalibrieren).
 |---|---|
 | ![Wohnwagen](images/preview-caravan.png) | ![Wohnmobil](images/preview-motorhome.png) |
 
-Ursprünglich für das [Fridolin-Display-Projekt](https://github.com/floh2111/ha-fridolin-display)
-gebaut (ESPHome-Touch-Display + eigene Home-Assistant-Integration),
-funktioniert aber mit **jeder** Entity-Kombination, die zwei
-Neigungswinkel in Grad liefert – unabhängig von Hersteller oder
-Sensor-Typ.
+Funktioniert mit **jeder** Entity-Kombination, die zwei Neigungswinkel
+in Grad liefert – unabhängig von Hersteller oder Sensor-Typ.
 
 ## Voraussetzungen
 
