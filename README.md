@@ -60,8 +60,9 @@ entity_zero_button: button.your_tilt_zero   # optional
 
 The card's own UI text (labels, the "Zero" button, the editor fields)
 follows your Home Assistant language setting (`hass.language`) –
-currently English and German, with English as the fallback for any
-other language. Contributions adding more languages are welcome (see
+currently English, German, French, Italian, Dutch, Polish, Danish and
+Spanish, with English as the fallback for any other language.
+Contributions adding more languages are welcome (see
 `TRANSLATIONS` in `rv-leveling-card.js`).
 
 ## Configuration options

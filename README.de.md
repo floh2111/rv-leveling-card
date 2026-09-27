@@ -60,8 +60,9 @@ entity_zero_button: button.deine_neigung_nullen   # optional
 
 Die eigenen UI-Texte der Karte (Labels, der "Nullen"-Button, die
 Editor-Felder) folgen deiner Home-Assistant-Spracheinstellung
-(`hass.language`) – aktuell Englisch und Deutsch, Englisch als
-Fallback für jede andere Sprache. Beiträge für weitere Sprachen sind
+(`hass.language`) – aktuell Englisch, Deutsch, Französisch, Italienisch,
+Niederländisch, Polnisch, Dänisch und Spanisch, Englisch als Fallback
+für jede andere Sprache. Beiträge für weitere Sprachen sind
 willkommen (siehe `TRANSLATIONS` in `rv-leveling-card.js`).
 
 ## Konfigurationsoptionen
