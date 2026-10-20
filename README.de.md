@@ -27,17 +27,17 @@ negative Werte, z.B. `-3.2` bis `3.2`):
 Optional ein `button` (oder eine andere Entity mit `button.press`), der
 auf der Gegenstelle den Nullpunkt setzt/kalibriert. Die Karte selbst
 speichert nichts – ein Druck auf "Nullen" ruft nur `button.press` auf
-dieser Entity auf.
+dieser Entity auf. 
 
 ## Installation über HACS
 
-1. HACS → oben rechts ⋮ → Benutzerdefinierte Repositories.
-2. Repository-URL: `https://github.com/floh2111/rv-leveling-card`,
-   Kategorie: **Dashboard**.
-3. "RV Leveling Card" installieren, Home Assistant neu starten.
+1. HACS öffnen und zu **Dashboard** (Frontend) gehen.
+2. Nach **RV Leveling Card** suchen und herunterladen.
+3. Browser neu laden (oder Home Assistant neu starten, falls gefordert).
 4. Die Ressource wird von HACS automatisch unter
    `/hacsfiles/rv-leveling-card/rv-leveling-card.js` eingebunden
    (Lovelace-Ressource wird von HACS selbst verwaltet).
+
 
 ## Karte hinzufügen
 
