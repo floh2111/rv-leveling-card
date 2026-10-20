@@ -27,17 +27,19 @@ negative values, e.g. `-3.2` to `3.2`):
 Optionally a `button` (or any other entity supporting `button.press`)
 that sets/calibrates the zero point on the source device. The card
 itself stores nothing – pressing "Zero" just calls `button.press` on
-that entity.
+that 
 
 ## Installation via HACS
 
-1. HACS → top right ⋮ → Custom repositories.
-2. Repository URL: `https://github.com/floh2111/rv-leveling-card`,
-   Category: **Dashboard**.
-3. Install "RV Leveling Card", restart Home Assistant.
-4. The resource is automatically registered by HACS under
+1. Open HACS and go to **Dashboard** (Frontend).
+2. Search for **RV Leveling Card** and download it.
+3. Reload your browser (or restart Home Assistant if prompted).
+4. The resource is registered automatically by HACS under
    `/hacsfiles/rv-leveling-card/rv-leveling-card.js` (the Lovelace
    resource is managed by HACS itself).
+
+
+
 
 ## Adding the card
 
