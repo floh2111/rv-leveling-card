@@ -8,26 +8,25 @@
  *
  * Funktioniert mit jeder Entity-Kombination, die zwei Neigungswinkel in
  * Grad liefert:
- *   - entity_lr: Sensor "Neigung links/rechts" (°, positiv/negativ)
- *   - entity_vh: Sensor "Neigung vorne/hinten" (°, positiv/negativ)
- *   - entity_zero_button (optional): ein button, der den Nullpunkt auf
- *     der Gegenstelle (z.B. im ESP-Flash) kalibriert/speichert
+ *  - entity_lr: Sensor "Neigung links/rechts" (°, positiv/negativ)
+ *  - entity_vh: Sensor "Neigung vorne/hinten" (°, positiv/negativ)
+ *  - entity_zero_button (optional): ein button, der den Nullpunkt auf
+ *    der Gegenstelle (z.B. im ESP-Flash) kalibriert/speichert
  *
  * Ein Druck auf "Nullen" in der Karte ruft button.press auf genau dieser
  * Entity auf - die Karte selbst speichert nichts, das macht die
  * Gegenstelle hinter dem Button.
  *
  * Einbindung (siehe README.md):
- *   1. Repo als Custom Repository (Kategorie "Dashboard") zu HACS
- *      hinzufügen, "RV Leveling Card" installieren.
- *   2. Home Assistant neu starten, Ressource wird von HACS automatisch
- *      unter /hacsfiles/rv-leveling-card/rv-leveling-card.js eingebunden.
- *   3. Karte hinzufügen:
- *        type: custom:rv-leveling-card
- *        vehicle_type: caravan   # oder: motorhome
- *        entity_lr: sensor.deine_neigung_links_rechts
- *        entity_vh: sensor.deine_neigung_vorne_hinten
- *        entity_zero_button: button.deine_neigung_nullen
+ *  1. In HACS nach "RV Leveling Card" suchen und herunterladen.
+ *     Die Ressource wird von HACS automatisch unter
+ *     /hacsfiles/rv-leveling-card/rv-leveling-card.js eingebunden.
+ *  2. Karte hinzufügen:
+ *       type: custom:rv-leveling-card
+ *       vehicle_type: caravan   # oder: motorhome
+ *       entity_lr: sensor.deine_neigung_links_rechts
+ *       entity_vh: sensor.deine_neigung_vorne_hinten
+ *       entity_zero_button: button.deine_neigung_nullen
  */
 
 // Uebersetzung der sichtbaren UI-Texte (nicht der Kommentare/des Codes).
@@ -166,7 +165,6 @@ const CARAVAN_SVG_BODY = `
   <circle cx="432" cy="140" r="7" fill="#C9D2DC" stroke="#3A4250" stroke-width="2"/>
   <line x1="150" y1="65" x2="150" y2="215" stroke="#202836" stroke-width="2" opacity="0.6"/>
   <line x1="260" y1="65" x2="260" y2="215" stroke="#202836" stroke-width="2" opacity="0.6"/>
-
   <circle cx="58" cy="92" r="11" fill="#2B3542" stroke="#55606F" stroke-width="2"/>
   <line x1="49" y1="88" x2="67" y2="88" stroke="#55606F" stroke-width="1.5"/>
   <line x1="49" y1="96" x2="67" y2="96" stroke="#55606F" stroke-width="1.5"/>
@@ -175,7 +173,6 @@ const CARAVAN_SVG_BODY = `
   <line x1="49" y1="200" x2="67" y2="200" stroke="#55606F" stroke-width="1.5"/>
   <rect x="130" y="188" width="50" height="24" rx="6" fill="#2B3542" stroke="#55606F" stroke-width="2"/>
   <line x1="155" y1="196" x2="155" y2="204" stroke="#55606F" stroke-width="2"/>
-
   <rect x="80" y="113" width="150" height="54" rx="27" fill="#3A4250" stroke="#55606F" stroke-width="2"/>
   <rect x="86" y="119" width="138" height="42" rx="21" fill="url(#fwGradV)"/>
   <line x1="136" y1="129" x2="136" y2="151" stroke="#101a05" stroke-width="3" stroke-linecap="round"/>
@@ -199,22 +196,18 @@ const MOTORHOME_SVG_BODY = `
     </linearGradient>
   </defs>
   <rect x="10" y="10" width="360" height="150" rx="26" fill="#17212C" stroke="#3A4250" stroke-width="4"/>
-
   <path d="M322,18 L364,42 L364,128 L322,150 Z" fill="url(#fwGradGlass)" stroke="#17212C" stroke-width="3"/>
   <line x1="343" y1="22" x2="343" y2="148" stroke="#17212C" stroke-width="2" opacity="0.7"/>
   <rect x="364" y="30" width="6" height="10" rx="3" fill="#55606F"/>
   <rect x="364" y="110" width="6" height="10" rx="3" fill="#55606F"/>
-
   <rect x="30" y="16" width="90" height="32" rx="8" fill="#3A4250" stroke="#55606F" stroke-width="2"/>
   <circle cx="55" cy="32" r="7" fill="#17212C" stroke="#55606F" stroke-width="2"/>
   <circle cx="80" cy="32" r="7" fill="#17212C" stroke="#55606F" stroke-width="2"/>
   <rect x="95" y="22" width="18" height="18" rx="4" fill="#17212C" stroke="#55606F" stroke-width="2"/>
-
   <rect x="70" y="63" width="150" height="44" rx="22" fill="#3A4250" stroke="#55606F" stroke-width="2"/>
   <rect x="76" y="69" width="138" height="32" rx="16" fill="url(#fwGradV)"/>
   <line x1="126" y1="74" x2="126" y2="96" stroke="#101a05" stroke-width="3" stroke-linecap="round"/>
   <line x1="164" y1="74" x2="164" y2="96" stroke="#101a05" stroke-width="3" stroke-linecap="round"/>
-
   <rect x="255" y="20" width="44" height="130" rx="22" fill="#3A4250" stroke="#55606F" stroke-width="2"/>
   <rect x="261" y="26" width="32" height="118" rx="16" fill="url(#fwGradH)"/>
   <line x1="266" y1="66" x2="288" y2="66" stroke="#101a05" stroke-width="3" stroke-linecap="round"/>
@@ -230,9 +223,9 @@ const VEHICLE_ART = {
     svg: CARAVAN_SVG_BODY,
     viewBox: { x: 10, y: 35, w: 449, h: 210 },
     hCenter: { x: 155, y: 140 },
-    hRange: [118, 192], // Vorne/Hinten-Röhre, Blase bewegt sich in X
+    hRange: [118, 192],   // Vorne/Hinten-Röhre, Blase bewegt sich in X
     vCenter: { x: 297, y: 140 },
-    vRange: [103, 177], // Links/Rechts-Röhre, Blase bewegt sich in Y
+    vRange: [103, 177],   // Links/Rechts-Röhre, Blase bewegt sich in Y
   },
   motorhome: {
     svg: MOTORHOME_SVG_BODY,
@@ -388,7 +381,6 @@ class RvLevelingCardEditor extends HTMLElement {
     this._form.computeLabel = this._computeLabel.bind(this);
   }
 }
-
 customElements.define("rv-leveling-card-editor", RvLevelingCardEditor);
 
 class RvLevelingCard extends HTMLElement {
@@ -446,9 +438,11 @@ class RvLevelingCard extends HTMLElement {
     const art = this._art();
     const vb = art.viewBox;
 
+    // Der Titel bleibt im Template leer und wird unten per textContent
+    // gesetzt - so wird nie Nutzertext als HTML interpretiert.
     const card = document.createElement("ha-card");
     card.innerHTML = `
-      <div class="fw-title">${this._config.title || t("default_title", this._hass)}</div>
+      <div class="fw-title"></div>
       <div class="fw-outer">
         <div class="fw-inner">
           <svg id="fwSvg" viewBox="${vb.x} ${vb.y} ${vb.w} ${vb.h}" xmlns="http://www.w3.org/2000/svg">
@@ -485,6 +479,10 @@ class RvLevelingCard extends HTMLElement {
       zeroBtn: card.querySelector("#fwZeroBtn"),
     };
 
+    // Titel sofort setzen, damit er nicht erst mit dem ersten hass-Update
+    // erscheint (ohne hass faellt t() auf Englisch zurueck).
+    this._els.title.textContent = this._config.title || t("default_title", this._hass);
+
     this._currentVehicleType = this._config.vehicle_type;
     this._els.zeroBtn.addEventListener("click", () => this._pressZero());
 
@@ -510,18 +508,21 @@ class RvLevelingCard extends HTMLElement {
     const vb = this._art().viewBox;
     const outerWidth = this._els.outer.clientWidth;
     if (!outerWidth) return;
+
     // Nach der Drehung um 90° wird aus der Breite des Grundrisses die Höhe
     // im Kartenlayout, und umgekehrt - daher hier getauscht: die
     // "unrotierte" Breite richtet sich nach der Kartenhöhe. Höhe direkt in
     // Pixeln setzen (nicht per padding-top-Prozent, siehe CSS-Kommentar).
     const outerHeight = outerWidth * (vb.w / vb.h);
     this._els.outer.style.height = outerHeight + "px";
+
     const innerWidth = outerHeight;
     const innerHeight = outerWidth;
     this._els.inner.style.width = innerWidth + "px";
     this._els.inner.style.height = innerHeight + "px";
     this._els.svg.setAttribute("width", innerWidth);
     this._els.svg.setAttribute("height", innerHeight);
+
     this._positionBubbles();
   }
 
@@ -534,20 +535,30 @@ class RvLevelingCard extends HTMLElement {
 
   _render() {
     if (!this._hass || !this._els) return;
+
     this._els.title.textContent = this._config.title || t("default_title", this._hass);
     this._els.labelLr.textContent = t("value_lr", this._hass);
     this._els.labelVh.textContent = t("value_vh", this._hass);
     this._els.zeroBtn.textContent = t("zero_button", this._hass);
+
     this._syncVehicleArt();
 
     const lrState = this._hass.states[this._config.entity_lr];
     const vhState = this._hass.states[this._config.entity_vh];
-
     const lr = lrState ? parseFloat(lrState.state) : NaN;
     const vh = vhState ? parseFloat(vhState.state) : NaN;
 
-    this._els.valLr.textContent = Number.isFinite(lr) ? lr.toFixed(1).replace(".", ",") + "°" : "--";
-    this._els.valVh.textContent = Number.isFinite(vh) ? vh.toFixed(1).replace(".", ",") + "°" : "--";
+    // Dezimaltrennzeichen folgt der Home-Assistant-Sprache
+    // (de: "-3,2°", en: "-3.2°").
+    const fmt = (v) =>
+      Number.isFinite(v)
+        ? v.toLocaleString(this._hass.language, {
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 1,
+          }) + "°"
+        : "--";
+    this._els.valLr.textContent = fmt(lr);
+    this._els.valVh.textContent = fmt(vh);
 
     this._angleLr = Number.isFinite(lr) ? lr : 0;
     this._angleVh = Number.isFinite(vh) ? vh : 0;
@@ -583,10 +594,14 @@ class RvLevelingCard extends HTMLElement {
 
 customElements.define("rv-leveling-card", RvLevelingCard);
 
-// Damit die Karte im UI-Karteneditor unter "Benutzerdefiniert" auftaucht
+// Damit die Karte im UI-Karteneditor unter "Benutzerdefiniert" auftaucht,
+// inklusive Live-Vorschau (preview: true)
 window.customCards = window.customCards || [];
 window.customCards.push({
   type: "rv-leveling-card",
   name: "RV Leveling Card",
-  description: "Kreuzlibelle auf einem Fahrzeug-Grundriss (Wohnwagen oder Wohnmobil, Front oben) aus zwei Neigungssensoren.",
+  preview: true,
+  description:
+    "Spirit level on a caravan or motorhome floor plan, driven by two tilt sensors.",
+  documentationURL: "https://github.com/floh2111/rv-leveling-card",
 });
